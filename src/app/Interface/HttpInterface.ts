@@ -12,3 +12,8 @@ export interface ReturnPost {
     "Category": string
 
   }
+  export interface PostDataModel{
+    name?: string,
+    salary?: number, 
+    age?: number
+  }

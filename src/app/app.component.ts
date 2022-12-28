@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ReturnPost,LoadData } from  "./Interface/HttpInterface";
+import {HttpServices} from "./services/http.service"
 
 @Component({
   selector: 'app-root',
@@ -9,13 +10,11 @@ import { ReturnPost,LoadData } from  "./Interface/HttpInterface";
 })
 
 export class AppComponent implements OnInit {
-  public loadedPosts:LoadData[] = [];
-  private url:string = "https://dummy.restapiexample.com/api/v1/create";
-  postHttpData = {"name":"test","salary":"123","age":"23"}
-  getEmployeeUrl = "https://api.publicapis.org/entries";
+  public loadedPosts:(LoadData[]) = [];
   isfetching = true;
+   
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient,private httpServices: HttpServices) {}
 
   ngOnInit() {
     this.onFetchPosts();
@@ -23,27 +22,27 @@ export class AppComponent implements OnInit {
 
   onCreatePost(postData: { name: string; salary: number; age: number }) {
     
-    // Send Http request
-   
-   
-    this.http.post(this.url,this.postHttpData)
+    this.httpServices.createAndStoreData(postData.name,postData.salary,postData.age)
     .subscribe(responseData=>{
+      console.log(responseData);
      
-     
+  
     })
+   
   }
 
   onFetchPosts() {
-    // Send Http request
-    this.http.get<ReturnPost>(this.getEmployeeUrl).subscribe(getData=>{
-      console.log(getData);
-      this.loadedPosts = getData.entries;
-      this.isfetching = false;
+   this.httpServices.fetchData().subscribe(getData=>{
+        console.log(getData);
+        this.loadedPosts = getData.entries;
+        this.isfetching = false;
+        this.loadedPosts;
     })
-   
   }
 
   onClearPosts() {
     // Send Http request
+   
+
   }
 }
